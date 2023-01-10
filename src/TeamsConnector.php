@@ -2,12 +2,15 @@
 
 namespace Sebbmyr\Teams;
 
+use Sebbmyr\Teams\Exception\UnexpectedTeamsResult;
+
 /**
  * Teams connector
  */
 class TeamsConnector
 {
     private $webhookUrl;
+    private ?string $lastResult;
 
     public function __construct($webhookUrl)
     {
@@ -37,13 +40,21 @@ class TeamsConnector
             'Content-Length: ' . strlen($json)
         ]);
 
-        $result = curl_exec($ch);
+        $this->lastResult = curl_exec($ch);
 
         if (curl_error($ch)) {
             throw new \Exception(curl_error($ch), curl_errno($ch));
         }
-        if ($result !== "1") {
-            throw new \Exception('Error response: ' . $result);
+        if ($this->lastResult !== "1") {
+            throw new UnexpectedTeamsResult('Error response: ' . $this->lastResult);
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastResult(): ?string
+    {
+        return $this->lastResult;
     }
 }
