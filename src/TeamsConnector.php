@@ -23,7 +23,7 @@ class TeamsConnector
      * @param  TeamsConnectorInterface $card
      * @param  int $curlOptTimeout by default = 10
      * @param  int $curlOptConnectTimeout by default = 3
-     * @throws Exception
+     * @throws \Exception|UnexpectedTeamsResult
      */
     public function send(TeamsConnectorInterface $card, $curlOptTimeout = 10, $curlOptConnectTimeout = 3)
     {
